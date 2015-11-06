@@ -102,12 +102,13 @@ func BenchmarkAce_Param(b *testing.B) {
 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
 	benchRequest(b, router, r)
 }
-func BenchmarkBear_Param(b *testing.B) {
-	router := loadBearSingle("GET", "/user/{name}", bearHandler)
 
-	r, _ := http.NewRequest("GET", "/user/gordon", nil)
-	benchRequest(b, router, r)
-}
+// func BenchmarkBear_Param(b *testing.B) {
+// 	router := loadBearSingle("GET", "/user/{name}", bearHandler)
+//
+// 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
+// 	benchRequest(b, router, r)
+// }
 func BenchmarkBeego_Param(b *testing.B) {
 	router := loadBeegoSingle("GET", "/user/:name", beegoHandler)
 
@@ -116,6 +117,12 @@ func BenchmarkBeego_Param(b *testing.B) {
 }
 func BenchmarkBone_Param(b *testing.B) {
 	router := loadBoneSingle("GET", "/user/:name", http.HandlerFunc(httpHandlerFunc))
+
+	r, _ := http.NewRequest("GET", "/user/gordon", nil)
+	benchRequest(b, router, r)
+}
+func BenchmarkChi_Param(b *testing.B) {
+	router := loadChiSingle("GET", "/user/:name", httpHandlerFunc)
 
 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
 	benchRequest(b, router, r)
@@ -277,12 +284,13 @@ func BenchmarkAce_Param5(b *testing.B) {
 	r, _ := http.NewRequest("GET", fiveRoute, nil)
 	benchRequest(b, router, r)
 }
-func BenchmarkBear_Param5(b *testing.B) {
-	router := loadBearSingle("GET", fiveBrace, bearHandler)
 
-	r, _ := http.NewRequest("GET", fiveRoute, nil)
-	benchRequest(b, router, r)
-}
+// func BenchmarkBear_Param5(b *testing.B) {
+// 	router := loadBearSingle("GET", fiveBrace, bearHandler)
+//
+// 	r, _ := http.NewRequest("GET", fiveRoute, nil)
+// 	benchRequest(b, router, r)
+// }
 func BenchmarkBeego_Param5(b *testing.B) {
 	router := loadBeegoSingle("GET", fiveColon, beegoHandler)
 
@@ -291,6 +299,12 @@ func BenchmarkBeego_Param5(b *testing.B) {
 }
 func BenchmarkBone_Param5(b *testing.B) {
 	router := loadBoneSingle("GET", fiveColon, http.HandlerFunc(httpHandlerFunc))
+
+	r, _ := http.NewRequest("GET", fiveRoute, nil)
+	benchRequest(b, router, r)
+}
+func BenchmarkChi_Param5(b *testing.B) {
+	router := loadChiSingle("GET", fiveColon, httpHandlerFunc)
 
 	r, _ := http.NewRequest("GET", fiveRoute, nil)
 	benchRequest(b, router, r)
@@ -451,12 +465,13 @@ func BenchmarkAce_Param20(b *testing.B) {
 	r, _ := http.NewRequest("GET", twentyRoute, nil)
 	benchRequest(b, router, r)
 }
-func BenchmarkBear_Param20(b *testing.B) {
-	router := loadBearSingle("GET", twentyBrace, bearHandler)
 
-	r, _ := http.NewRequest("GET", twentyRoute, nil)
-	benchRequest(b, router, r)
-}
+// func BenchmarkBear_Param20(b *testing.B) {
+// 	router := loadBearSingle("GET", twentyBrace, bearHandler)
+//
+// 	r, _ := http.NewRequest("GET", twentyRoute, nil)
+// 	benchRequest(b, router, r)
+// }
 func BenchmarkBeego_Param20(b *testing.B) {
 	router := loadBeegoSingle("GET", twentyColon, beegoHandler)
 
@@ -465,6 +480,12 @@ func BenchmarkBeego_Param20(b *testing.B) {
 }
 func BenchmarkBone_Param20(b *testing.B) {
 	router := loadBoneSingle("GET", twentyColon, http.HandlerFunc(httpHandlerFunc))
+
+	r, _ := http.NewRequest("GET", twentyRoute, nil)
+	benchRequest(b, router, r)
+}
+func BenchmarkChi_Param20(b *testing.B) {
+	router := loadChiSingle("GET", twentyColon, httpHandlerFunc)
 
 	r, _ := http.NewRequest("GET", twentyRoute, nil)
 	benchRequest(b, router, r)
@@ -621,12 +642,13 @@ func BenchmarkAce_ParamWrite(b *testing.B) {
 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
 	benchRequest(b, router, r)
 }
-func BenchmarkBear_ParamWrite(b *testing.B) {
-	router := loadBearSingle("GET", "/user/{name}", bearHandlerWrite)
 
-	r, _ := http.NewRequest("GET", "/user/gordon", nil)
-	benchRequest(b, router, r)
-}
+// func BenchmarkBear_ParamWrite(b *testing.B) {
+// 	router := loadBearSingle("GET", "/user/{name}", bearHandlerWrite)
+//
+// 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
+// 	benchRequest(b, router, r)
+// }
 func BenchmarkBeego_ParamWrite(b *testing.B) {
 	router := loadBeegoSingle("GET", "/user/:name", beegoHandlerWrite)
 
@@ -635,6 +657,12 @@ func BenchmarkBeego_ParamWrite(b *testing.B) {
 }
 func BenchmarkBone_ParamWrite(b *testing.B) {
 	router := loadBoneSingle("GET", "/user/:name", http.HandlerFunc(boneHandlerWrite))
+
+	r, _ := http.NewRequest("GET", "/user/gordon", nil)
+	benchRequest(b, router, r)
+}
+func BenchmarkChi_ParamWrite(b *testing.B) {
+	router := loadChiSingle("GET", "/user/:name", chiHandleWrite)
 
 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
 	benchRequest(b, router, r)

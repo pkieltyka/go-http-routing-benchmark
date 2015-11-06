@@ -22,6 +22,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"github.com/bmizerany/pat"
+	"github.com/pressly/chi"
 	// "github.com/daryl/zeus"
 	"github.com/dimfeld/httptreemux"
 	"github.com/emicklei/go-restful"
@@ -47,9 +48,10 @@ import (
 	"github.com/revel/revel"
 	"github.com/robfig/pathtree"
 	"github.com/typepress/rivet"
-	"github.com/ursiform/bear"
+	// "github.com/ursiform/bear"
 	"github.com/vanng822/r2router"
 	goji "github.com/zenazn/goji/web"
+	netcontext "golang.org/x/net/context"
 )
 
 type route struct {
@@ -133,45 +135,45 @@ func loadAceSingle(method, path string, handle ace.HandlerFunc) http.Handler {
 }
 
 // bear
-func bearHandler(_ http.ResponseWriter, _ *http.Request, _ *bear.Context) {}
-
-func bearHandlerWrite(w http.ResponseWriter, _ *http.Request, ctx *bear.Context) {
-	io.WriteString(w, ctx.Params["name"])
-}
-
-func bearHandlerTest(w http.ResponseWriter, r *http.Request, _ *bear.Context) {
-	io.WriteString(w, r.RequestURI)
-}
-
-func loadBear(routes []route) http.Handler {
-	h := bearHandler
-	if loadTestHandler {
-		h = bearHandlerTest
-	}
-
-	router := bear.New()
-	re := regexp.MustCompile(":([^/]*)")
-	for _, route := range routes {
-		switch route.method {
-		case "GET", "POST", "PUT", "PATCH", "DELETE":
-			router.On(route.method, re.ReplaceAllString(route.path, "{$1}"), h)
-		default:
-			panic("Unknown HTTP method: " + route.method)
-		}
-	}
-	return router
-}
-
-func loadBearSingle(method string, path string, handler bear.HandlerFunc) http.Handler {
-	router := bear.New()
-	switch method {
-	case "GET", "POST", "PUT", "PATCH", "DELETE":
-		router.On(method, path, handler)
-	default:
-		panic("Unknown HTTP method: " + method)
-	}
-	return router
-}
+// func bearHandler(_ http.ResponseWriter, _ *http.Request, _ *bear.Context) {}
+//
+// func bearHandlerWrite(w http.ResponseWriter, _ *http.Request, ctx *bear.Context) {
+// 	io.WriteString(w, ctx.Params["name"])
+// }
+//
+// func bearHandlerTest(w http.ResponseWriter, r *http.Request, _ *bear.Context) {
+// 	io.WriteString(w, r.RequestURI)
+// }
+//
+// func loadBear(routes []route) http.Handler {
+// 	h := bearHandler
+// 	if loadTestHandler {
+// 		h = bearHandlerTest
+// 	}
+//
+// 	router := bear.New()
+// 	re := regexp.MustCompile(":([^/]*)")
+// 	for _, route := range routes {
+// 		switch route.method {
+// 		case "GET", "POST", "PUT", "PATCH", "DELETE":
+// 			router.On(route.method, re.ReplaceAllString(route.path, "{$1}"), h)
+// 		default:
+// 			panic("Unknown HTTP method: " + route.method)
+// 		}
+// 	}
+// 	return router
+// }
+//
+// func loadBearSingle(method string, path string, handler bear.HandlerFunc) http.Handler {
+// 	router := bear.New()
+// 	switch method {
+// 	case "GET", "POST", "PUT", "PATCH", "DELETE":
+// 		router.On(method, path, handler)
+// 	default:
+// 		panic("Unknown HTTP method: " + method)
+// 	}
+// 	return router
+// }
 
 // beego
 func beegoHandler(ctx *context.Context) {}
@@ -475,6 +477,56 @@ func loadGocraftWebSingle(method, path string, handler interface{}) http.Handler
 		panic("Unknow HTTP method: " + method)
 	}
 	return router
+}
+
+// chi
+func chiHandleWrite(ctx netcontext.Context, w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, chi.URLParams(ctx)["name"])
+}
+
+func loadChi(routes []route) http.Handler {
+	h := httpHandlerFunc
+	if loadTestHandler {
+		h = httpHandlerFuncTest
+	}
+
+	mux := chi.NewRouter()
+	for _, route := range routes {
+		switch route.method {
+		case "GET":
+			mux.Get(route.path, h)
+		case "POST":
+			mux.Post(route.path, h)
+		case "PUT":
+			mux.Put(route.path, h)
+		case "PATCH":
+			mux.Patch(route.path, h)
+		case "DELETE":
+			mux.Delete(route.path, h)
+		default:
+			panic("Unknown HTTP method: " + route.method)
+		}
+	}
+	return mux
+}
+
+func loadChiSingle(method, path string, handler interface{}) http.Handler {
+	mux := chi.NewRouter()
+	switch method {
+	case "GET":
+		mux.Get(path, handler)
+	case "POST":
+		mux.Post(path, handler)
+	case "PUT":
+		mux.Put(path, handler)
+	case "PATCH":
+		mux.Patch(path, handler)
+	case "DELETE":
+		mux.Delete(path, handler)
+	default:
+		panic("Unknown HTTP method: " + method)
+	}
+	return mux
 }
 
 // goji
