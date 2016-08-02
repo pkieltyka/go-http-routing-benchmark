@@ -231,9 +231,9 @@ func init() {
 	calcMem("Denco", func() {
 		staticDenco = loadDenco(staticRoutes)
 	})
-	calcMem("Echo", func() {
-		staticEcho = loadEcho(staticRoutes)
-	})
+	// calcMem("Echo", func() {
+	// 	staticEcho = loadEcho(staticRoutes)
+	// })
 	calcMem("Gin", func() {
 		staticGin = loadGin(staticRoutes)
 	})

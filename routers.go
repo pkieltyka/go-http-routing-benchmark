@@ -32,7 +32,6 @@ import (
 	"github.com/gocraft/web"
 	"github.com/gorilla/mux"
 	"github.com/julienschmidt/httprouter"
-	"github.com/labstack/echo"
 	llog "github.com/lunny/log"
 	"github.com/lunny/tango"
 	vulcan "github.com/mailgun/route"
@@ -51,7 +50,6 @@ import (
 	// "github.com/ursiform/bear"
 	"github.com/vanng822/r2router"
 	goji "github.com/zenazn/goji/web"
-	netcontext "golang.org/x/net/context"
 )
 
 type route struct {
@@ -328,64 +326,66 @@ func loadDencoSingle(method, path string, h denco.HandlerFunc) http.Handler {
 }
 
 // Echo
-func echoHandler(c *echo.Context) error {
-	return nil
-}
-
-func echoHandlerWrite(c *echo.Context) error {
-	io.WriteString(c.Response(), c.Param("name"))
-	return nil
-}
-
-func echoHandlerTest(c *echo.Context) error {
-	io.WriteString(c.Response(), c.Request().RequestURI)
-	return nil
-}
-
-func loadEcho(routes []route) http.Handler {
-	var h interface{} = echoHandler
-	if loadTestHandler {
-		h = echoHandlerTest
-	}
-
-	e := echo.New()
-	for _, r := range routes {
-		switch r.method {
-		case "GET":
-			e.Get(r.path, h)
-		case "POST":
-			e.Post(r.path, h)
-		case "PUT":
-			e.Put(r.path, h)
-		case "PATCH":
-			e.Patch(r.path, h)
-		case "DELETE":
-			e.Delete(r.path, h)
-		default:
-			panic("Unknow HTTP method: " + r.method)
-		}
-	}
-	return e
-}
-
-func loadEchoSingle(method, path string, h interface{}) http.Handler {
-	e := echo.New()
-	switch method {
-	case "GET":
-		e.Get(path, h)
-	case "POST":
-		e.Post(path, h)
-	case "PUT":
-		e.Put(path, h)
-	case "PATCH":
-		e.Patch(path, h)
-	case "DELETE":
-		e.Delete(path, h)
-	default:
-		panic("Unknow HTTP method: " + method)
-	}
-	return e
-}
+// func echoHandler(c echo.Context) error {
+// 	return nil
+// }
+//
+// func echoHandlerWrite(c echo.Context) error {
+// 	io.WriteString(c.Response(), c.Param("name"))
+// 	return nil
+// }
+//
+// func echoHandlerTest(c echo.Context) error {
+// 	io.WriteString(c.Response(), c.Request().URI())
+// 	return nil
+// }
+//
+// func loadEcho(routes []route) http.Handler {
+// 	// var h echo.Handler = echo.HandlerFunc(echoHandler)
+// 	var h echo.Handler = echo.HandlerFunc(echoHandler)
+// 	if loadTestHandler {
+// 		h = echo.HandlerFunc(echoHandlerTest)
+// 	}
+//
+// 	e := echo.New()
+// 	for _, r := range routes {
+// 		switch r.method {
+// 		case "GET":
+// 			e.Get(r.path, h)
+// 		case "POST":
+// 			e.Post(r.path, h)
+// 		case "PUT":
+// 			e.Put(r.path, h)
+// 		case "PATCH":
+// 			e.Patch(r.path, h)
+// 		case "DELETE":
+// 			e.Delete(r.path, h)
+// 		default:
+// 			panic("Unknow HTTP method: " + r.method)
+// 		}
+// 	}
+//
+// 	return http.HandlerFunc(e)
+// }
+//
+// func loadEchoSingle(method, path string, h echo.Handler) http.Handler {
+// 	e := echo.New()
+// 	switch method {
+// 	case "GET":
+// 		e.Get(path, h)
+// 	case "POST":
+// 		e.Post(path, h)
+// 	case "PUT":
+// 		e.Put(path, h)
+// 	case "PATCH":
+// 		e.Patch(path, h)
+// 	case "DELETE":
+// 		e.Delete(path, h)
+// 	default:
+// 		panic("Unknow HTTP method: " + method)
+// 	}
+// 	return e
+// }
 
 // Gin
 func ginHandle(_ *gin.Context) {}
@@ -480,8 +480,8 @@ func loadGocraftWebSingle(method, path string, handler interface{}) http.Handler
 }
 
 // chi
-func chiHandleWrite(ctx netcontext.Context, w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, chi.URLParams(ctx)["name"])
+func chiHandleWrite(w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, chi.URLParam(r, "name"))
 }
 
 func loadChi(routes []route) http.Handler {
@@ -510,7 +510,7 @@ func loadChi(routes []route) http.Handler {
 	return mux
 }
 
-func loadChiSingle(method, path string, handler interface{}) http.Handler {
+func loadChiSingle(method, path string, handler http.HandlerFunc) http.Handler {
 	mux := chi.NewRouter()
 	switch method {
 	case "GET":

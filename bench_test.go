@@ -127,18 +127,20 @@ func BenchmarkChi_Param(b *testing.B) {
 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
 	benchRequest(b, router, r)
 }
+
 func BenchmarkDenco_Param(b *testing.B) {
 	router := loadDencoSingle("GET", "/user/:name", dencoHandler)
 
 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
 	benchRequest(b, router, r)
 }
-func BenchmarkEcho_Param(b *testing.B) {
-	router := loadEchoSingle("GET", "/user/:name", echoHandler)
 
-	r, _ := http.NewRequest("GET", "/user/gordon", nil)
-	benchRequest(b, router, r)
-}
+// func BenchmarkEcho_Param(b *testing.B) {
+// 	router := loadEchoSingle("GET", "/user/:name", echoHandler)
+//
+// 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
+// 	benchRequest(b, router, r)
+// }
 func BenchmarkGin_Param(b *testing.B) {
 	router := loadGinSingle("GET", "/user/:name", ginHandle)
 
@@ -309,18 +311,20 @@ func BenchmarkChi_Param5(b *testing.B) {
 	r, _ := http.NewRequest("GET", fiveRoute, nil)
 	benchRequest(b, router, r)
 }
+
 func BenchmarkDenco_Param5(b *testing.B) {
 	router := loadDencoSingle("GET", fiveColon, dencoHandler)
 
 	r, _ := http.NewRequest("GET", fiveRoute, nil)
 	benchRequest(b, router, r)
 }
-func BenchmarkEcho_Param5(b *testing.B) {
-	router := loadEchoSingle("GET", fiveColon, echoHandler)
 
-	r, _ := http.NewRequest("GET", fiveRoute, nil)
-	benchRequest(b, router, r)
-}
+// func BenchmarkEcho_Param5(b *testing.B) {
+// 	router := loadEchoSingle("GET", fiveColon, echoHandler)
+//
+// 	r, _ := http.NewRequest("GET", fiveRoute, nil)
+// 	benchRequest(b, router, r)
+// }
 func BenchmarkGin_Param5(b *testing.B) {
 	router := loadGinSingle("GET", fiveColon, ginHandle)
 
@@ -490,18 +494,20 @@ func BenchmarkChi_Param20(b *testing.B) {
 	r, _ := http.NewRequest("GET", twentyRoute, nil)
 	benchRequest(b, router, r)
 }
+
 func BenchmarkDenco_Param20(b *testing.B) {
 	router := loadDencoSingle("GET", twentyColon, dencoHandler)
 
 	r, _ := http.NewRequest("GET", twentyRoute, nil)
 	benchRequest(b, router, r)
 }
-func BenchmarkEcho_Param20(b *testing.B) {
-	router := loadEchoSingle("GET", twentyColon, echoHandler)
 
-	r, _ := http.NewRequest("GET", twentyRoute, nil)
-	benchRequest(b, router, r)
-}
+// func BenchmarkEcho_Param20(b *testing.B) {
+// 	router := loadEchoSingle("GET", twentyColon, echoHandler)
+//
+// 	r, _ := http.NewRequest("GET", twentyRoute, nil)
+// 	benchRequest(b, router, r)
+// }
 func BenchmarkGin_Param20(b *testing.B) {
 	router := loadGinSingle("GET", twentyColon, ginHandle)
 
@@ -667,18 +673,20 @@ func BenchmarkChi_ParamWrite(b *testing.B) {
 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
 	benchRequest(b, router, r)
 }
+
 func BenchmarkDenco_ParamWrite(b *testing.B) {
 	router := loadDencoSingle("GET", "/user/:name", dencoHandlerWrite)
 
 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
 	benchRequest(b, router, r)
 }
-func BenchmarkEcho_ParamWrite(b *testing.B) {
-	router := loadEchoSingle("GET", "/user/:name", echoHandlerWrite)
 
-	r, _ := http.NewRequest("GET", "/user/gordon", nil)
-	benchRequest(b, router, r)
-}
+// func BenchmarkEcho_ParamWrite(b *testing.B) {
+// 	router := loadEchoSingle("GET", "/user/:name", echoHandlerWrite)
+//
+// 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
+// 	benchRequest(b, router, r)
+// }
 func BenchmarkGin_ParamWrite(b *testing.B) {
 	router := loadGinSingle("GET", "/user/:name", ginHandleWrite)
 

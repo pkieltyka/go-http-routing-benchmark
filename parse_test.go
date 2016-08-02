@@ -107,9 +107,9 @@ func init() {
 	calcMem("Denco", func() {
 		parseDenco = loadDenco(parseAPI)
 	})
-	calcMem("Echo", func() {
-		parseEcho = loadEcho(parseAPI)
-	})
+	// calcMem("Echo", func() {
+	// 	parseEcho = loadEcho(parseAPI)
+	// })
 	calcMem("Gin", func() {
 		parseGin = loadGin(parseAPI)
 	})
