@@ -48,6 +48,9 @@ import (
 	"github.com/robfig/pathtree"
 	"github.com/typepress/rivet"
 	// "github.com/ursiform/bear"
+	"strings"
+
+	"github.com/AndrewBurian/powermux"
 	"github.com/vanng822/r2router"
 	goji "github.com/zenazn/goji/web"
 )
@@ -1185,11 +1188,11 @@ func loadRevelSingle(method, path, action string) http.Handler {
 func rivetHandler() {}
 
 func rivetHandlerWrite(c rivet.Context) {
-	c.WriteString(c.GetParams().Get("name"))
+	c.WriteString(c.Params.Get("name"))
 }
 
 func rivetHandlerTest(c rivet.Context) {
-	c.WriteString(c.Request().RequestURI)
+	c.WriteString(c.Req.RequestURI)
 }
 
 func loadRivet(routes []route) http.Handler {
@@ -1198,7 +1201,7 @@ func loadRivet(routes []route) http.Handler {
 		h = rivetHandlerTest
 	}
 
-	router := rivet.NewRouter(nil)
+	router := rivet.New()
 	for _, route := range routes {
 		router.Handle(route.method, route.path, h)
 	}
@@ -1206,7 +1209,7 @@ func loadRivet(routes []route) http.Handler {
 }
 
 func loadRivetSingle(method, path string, handler interface{}) http.Handler {
-	router := rivet.NewRouter(nil)
+	router := rivet.New()
 
 	router.Handle(method, path, handler)
 
@@ -1414,6 +1417,58 @@ func loadVulcanSingle(method, path string, handler http.HandlerFunc) http.Handle
 // 	}
 // 	return m
 // }
+
+// PowerMux
+func powerMuxHandlerWrite(w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, powermux.PathParam(r, "name"))
+}
+
+func loadPowerMux(routes []route) http.Handler {
+	h := http.HandlerFunc(httpHandlerFunc)
+	if loadTestHandler {
+		h = http.HandlerFunc(httpHandlerFuncTest)
+	}
+
+	m := powermux.NewServeMux()
+	for _, route := range routes {
+		if route.path != "/" && strings.HasSuffix(route.path, "/") {
+			route.path = route.path + "*"
+		}
+		r := m.Route(route.path)
+		switch route.method {
+		case "GET":
+			r.GetFunc(h)
+		case "POST":
+			r.PostFunc(h)
+		case "PUT":
+			r.PutFunc(h)
+		case "DELETE":
+			r.DeleteFunc(h)
+		default:
+			panic("Unknow HTTP method: " + route.method)
+		}
+	}
+	return m
+}
+
+func loadPowerMuxSingle(method, path string, handler http.HandlerFunc) http.Handler {
+	m := powermux.NewServeMux()
+	r := m.Route(path)
+
+	switch method {
+	case "GET":
+		r.GetFunc(handler)
+	case "POST":
+		r.PostFunc(handler)
+	case "PUT":
+		r.PutFunc(handler)
+	case "DELETE":
+		r.DeleteFunc(handler)
+	default:
+		panic("Unknow HTTP method: " + method)
+	}
+	return m
+}
 
 // Usage notice
 func main() {

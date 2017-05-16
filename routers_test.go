@@ -34,12 +34,13 @@ var (
 		{"Possum", loadPossum},
 		{"R2router", loadR2router},
 		{"Revel", loadRevel},
-		{"Rivet", loadRivet},
-		{"Tango", loadTango},
+		// {"Rivet", loadRivet},
+		// {"Tango", loadTango},
 		{"TigerTonic", loadTigerTonic},
 		{"Traffic", loadTraffic},
 		{"Vulcan", loadVulcan},
 		// {"Zeus", loadZeus},
+		{"PowerMux", loadPowerMux},
 	}
 
 	// all APIs

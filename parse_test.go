@@ -78,12 +78,13 @@ var (
 	parsePossum      http.Handler
 	parseR2router    http.Handler
 	parseRevel       http.Handler
-	parseRivet       http.Handler
-	parseTango       http.Handler
-	parseTigerTonic  http.Handler
-	parseTraffic     http.Handler
-	parseVulcan      http.Handler
+	// parseRivet       http.Handler
+	// parseTango       http.Handler
+	parseTigerTonic http.Handler
+	parseTraffic    http.Handler
+	parseVulcan     http.Handler
 	// parseZeus        http.Handler
+	parsePowerMux http.Handler
 )
 
 func init() {
@@ -155,12 +156,12 @@ func init() {
 	calcMem("Revel", func() {
 		parseRevel = loadRevel(parseAPI)
 	})
-	calcMem("Rivet", func() {
-		parseRivet = loadRivet(parseAPI)
-	})
-	calcMem("Tango", func() {
-		parseTango = loadTango(parseAPI)
-	})
+	// calcMem("Rivet", func() {
+	// 	parseRivet = loadRivet(parseAPI)
+	// })
+	// calcMem("Tango", func() {
+	// 	parseTango = loadTango(parseAPI)
+	// })
 	calcMem("TigerTonic", func() {
 		parseTigerTonic = loadTigerTonic(parseAPI)
 	})
@@ -173,7 +174,9 @@ func init() {
 	// calcMem("Zeus", func() {
 	// 	parseZeus = loadZeus(parseAPI)
 	// })
-
+	calcMem("PowerMux", func() {
+		parsePowerMux = loadPowerMux(parseAPI)
+	})
 	println()
 }
 
@@ -267,14 +270,15 @@ func BenchmarkRevel_ParseStatic(b *testing.B) {
 	req, _ := http.NewRequest("GET", "/1/users", nil)
 	benchRequest(b, parseRevel, req)
 }
-func BenchmarkRivet_ParseStatic(b *testing.B) {
-	req, _ := http.NewRequest("GET", "/1/users", nil)
-	benchRequest(b, parseRivet, req)
-}
-func BenchmarkTango_ParseStatic(b *testing.B) {
-	req, _ := http.NewRequest("GET", "/1/users", nil)
-	benchRequest(b, parseTango, req)
-}
+
+// func BenchmarkRivet_ParseStatic(b *testing.B) {
+// 	req, _ := http.NewRequest("GET", "/1/users", nil)
+// 	benchRequest(b, parseRivet, req)
+// }
+// func BenchmarkTango_ParseStatic(b *testing.B) {
+// 	req, _ := http.NewRequest("GET", "/1/users", nil)
+// 	benchRequest(b, parseTango, req)
+// }
 func BenchmarkTigerTonic_ParseStatic(b *testing.B) {
 	req, _ := http.NewRequest("GET", "/1/users", nil)
 	benchRequest(b, parseTigerTonic, req)
@@ -292,6 +296,10 @@ func BenchmarkVulcan_ParseStatic(b *testing.B) {
 // 	req, _ := http.NewRequest("GET", "/1/users", nil)
 // 	benchRequest(b, parseZeus, req)
 // }
+func BenchmarkPowerMux_ParseStatic(b *testing.B) {
+	req, _ := http.NewRequest("GET", "/1/users", nil)
+	benchRequest(b, parsePowerMux, req)
+}
 
 // One Param
 func BenchmarkAce_ParseParam(b *testing.B) {
@@ -383,14 +391,15 @@ func BenchmarkRevel_ParseParam(b *testing.B) {
 	req, _ := http.NewRequest("GET", "/1/classes/go", nil)
 	benchRequest(b, parseRevel, req)
 }
-func BenchmarkRivet_ParseParam(b *testing.B) {
-	req, _ := http.NewRequest("GET", "/1/classes/go", nil)
-	benchRequest(b, parseRivet, req)
-}
-func BenchmarkTango_ParseParam(b *testing.B) {
-	req, _ := http.NewRequest("GET", "/1/classes/go", nil)
-	benchRequest(b, parseTango, req)
-}
+
+// func BenchmarkRivet_ParseParam(b *testing.B) {
+// 	req, _ := http.NewRequest("GET", "/1/classes/go", nil)
+// 	benchRequest(b, parseRivet, req)
+// }
+// func BenchmarkTango_ParseParam(b *testing.B) {
+// 	req, _ := http.NewRequest("GET", "/1/classes/go", nil)
+// 	benchRequest(b, parseTango, req)
+// }
 func BenchmarkTigerTonic_ParseParam(b *testing.B) {
 	req, _ := http.NewRequest("GET", "/1/classes/go", nil)
 	benchRequest(b, parseTigerTonic, req)
@@ -408,6 +417,10 @@ func BenchmarkVulcan_ParseParam(b *testing.B) {
 // 	req, _ := http.NewRequest("GET", "/1/classes/go", nil)
 // 	benchRequest(b, parseZeus, req)
 // }
+func BenchmarkPowerMux_ParseParam(b *testing.B) {
+	req, _ := http.NewRequest("GET", "/1/classes/go", nil)
+	benchRequest(b, parsePowerMux, req)
+}
 
 // Two Params
 func BenchmarkAce_Parse2Params(b *testing.B) {
@@ -499,14 +512,15 @@ func BenchmarkRevel_Parse2Params(b *testing.B) {
 	req, _ := http.NewRequest("GET", "/1/classes/go/123456789", nil)
 	benchRequest(b, parseRevel, req)
 }
-func BenchmarkRivet_Parse2Params(b *testing.B) {
-	req, _ := http.NewRequest("GET", "/1/classes/go/123456789", nil)
-	benchRequest(b, parseRivet, req)
-}
-func BenchmarkTango_Parse2Params(b *testing.B) {
-	req, _ := http.NewRequest("GET", "/1/classes/go/123456789", nil)
-	benchRequest(b, parseTango, req)
-}
+
+// func BenchmarkRivet_Parse2Params(b *testing.B) {
+// 	req, _ := http.NewRequest("GET", "/1/classes/go/123456789", nil)
+// 	benchRequest(b, parseRivet, req)
+// }
+// func BenchmarkTango_Parse2Params(b *testing.B) {
+// 	req, _ := http.NewRequest("GET", "/1/classes/go/123456789", nil)
+// 	benchRequest(b, parseTango, req)
+// }
 func BenchmarkTigerTonic_Parse2Params(b *testing.B) {
 	req, _ := http.NewRequest("GET", "/1/classes/go/123456789", nil)
 	benchRequest(b, parseTigerTonic, req)
@@ -524,6 +538,10 @@ func BenchmarkVulcan_Parse2Params(b *testing.B) {
 // 	req, _ := http.NewRequest("GET", "/1/classes/go/123456789", nil)
 // 	benchRequest(b, parseZeus, req)
 // }
+func BenchmarkPowerMux_Parse2Params(b *testing.B) {
+	req, _ := http.NewRequest("GET", "/1/classes/go/123456789", nil)
+	benchRequest(b, parsePowerMux, req)
+}
 
 // All Routes
 func BenchmarkAce_ParseAll(b *testing.B) {
@@ -593,12 +611,13 @@ func BenchmarkR2router_ParseAll(b *testing.B) {
 func BenchmarkRevel_ParseAll(b *testing.B) {
 	benchRoutes(b, parseRevel, parseAPI)
 }
-func BenchmarkRivet_ParseAll(b *testing.B) {
-	benchRoutes(b, parseRivet, parseAPI)
-}
-func BenchmarkTango_ParseAll(b *testing.B) {
-	benchRoutes(b, parseTango, parseAPI)
-}
+
+// func BenchmarkRivet_ParseAll(b *testing.B) {
+// 	benchRoutes(b, parseRivet, parseAPI)
+// }
+// func BenchmarkTango_ParseAll(b *testing.B) {
+// 	benchRoutes(b, parseTango, parseAPI)
+// }
 func BenchmarkTigerTonic_ParseAll(b *testing.B) {
 	benchRoutes(b, parseTigerTonic, parseAPI)
 }
@@ -612,3 +631,6 @@ func BenchmarkVulcan_ParseAll(b *testing.B) {
 // func BenchmarkZeus_ParseAll(b *testing.B) {
 // 	benchRoutes(b, parseZeus, parseAPI)
 // }
+func BenchmarkPowerMux_ParseAll(b *testing.B) {
+	benchRoutes(b, parsePowerMux, parseAPI)
+}
