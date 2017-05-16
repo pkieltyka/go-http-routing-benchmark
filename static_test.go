@@ -194,11 +194,12 @@ var (
 	staticPossum      http.Handler
 	staticR2router    http.Handler
 	staticRevel       http.Handler
-	staticRivet       http.Handler
-	staticTango       http.Handler
-	staticTigerTonic  http.Handler
-	staticTraffic     http.Handler
-	staticVulcan      http.Handler
+	// staticRivet       http.Handler
+	// staticTango       http.Handler
+	staticTigerTonic http.Handler
+	staticTraffic    http.Handler
+	staticVulcan     http.Handler
+	staticPowerMux   http.Handler
 	// staticZeus        http.Handler
 )
 
@@ -279,12 +280,12 @@ func init() {
 	calcMem("Revel", func() {
 		staticRevel = loadRevel(staticRoutes)
 	})
-	calcMem("Rivet", func() {
-		staticRivet = loadRivet(staticRoutes)
-	})
-	calcMem("Tango", func() {
-		staticTango = loadTango(staticRoutes)
-	})
+	// calcMem("Rivet", func() {
+	// 	staticRivet = loadRivet(staticRoutes)
+	// })
+	// calcMem("Tango", func() {
+	// 	staticTango = loadTango(staticRoutes)
+	// })
 	calcMem("TigerTonic", func() {
 		staticTigerTonic = loadTigerTonic(staticRoutes)
 	})
@@ -297,7 +298,9 @@ func init() {
 	// calcMem("Zeus", func() {
 	// 	staticZeus = loadZeus(staticRoutes)
 	// })
-
+	calcMem("PowerMux", func() {
+		staticPowerMux = loadPowerMux(staticRoutes)
+	})
 	println()
 }
 
@@ -373,12 +376,13 @@ func BenchmarkR2router_StaticAll(b *testing.B) {
 func BenchmarkRevel_StaticAll(b *testing.B) {
 	benchRoutes(b, staticRevel, staticRoutes)
 }
-func BenchmarkRivet_StaticAll(b *testing.B) {
-	benchRoutes(b, staticRivet, staticRoutes)
-}
-func BenchmarkTango_StaticAll(b *testing.B) {
-	benchRoutes(b, staticTango, staticRoutes)
-}
+
+// func BenchmarkRivet_StaticAll(b *testing.B) {
+// 	benchRoutes(b, staticRivet, staticRoutes)
+// }
+// func BenchmarkTango_StaticAll(b *testing.B) {
+// 	benchRoutes(b, staticTango, staticRoutes)
+// }
 func BenchmarkTigerTonic_StaticAll(b *testing.B) {
 	benchRoutes(b, staticTigerTonic, staticRoutes)
 }
@@ -387,6 +391,9 @@ func BenchmarkTraffic_StaticAll(b *testing.B) {
 }
 func BenchmarkVulcan_StaticAll(b *testing.B) {
 	benchRoutes(b, staticVulcan, staticRoutes)
+}
+func BenchmarkPowerMux_StaticAll(b *testing.B) {
+	benchRoutes(b, staticPowerMux, staticRoutes)
 }
 
 // func BenchmarkZeus_StaticAll(b *testing.B) {

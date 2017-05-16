@@ -237,12 +237,13 @@ func BenchmarkRevel_Param(b *testing.B) {
 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
 	benchRequest(b, router, r)
 }
-func BenchmarkRivet_Param(b *testing.B) {
-	router := loadRivetSingle("GET", "/user/:name", rivetHandler)
 
-	r, _ := http.NewRequest("GET", "/user/gordon", nil)
-	benchRequest(b, router, r)
-}
+// func BenchmarkRivet_Param(b *testing.B) {
+// 	router := loadRivetSingle("GET", "/user/:name", rivetHandler)
+
+// 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
+// 	benchRequest(b, router, r)
+// }
 func BenchmarkTango_Param(b *testing.B) {
 	router := loadTangoSingle("GET", "/user/:name", tangoHandler)
 
@@ -274,6 +275,12 @@ func BenchmarkVulcan_Param(b *testing.B) {
 // 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
 // 	benchRequest(b, router, r)
 // }
+func BenchmarkPowerMux_Param(b *testing.B) {
+	router := loadPowerMuxSingle("GET", "/user/:name", httpHandlerFunc)
+
+	r, _ := http.NewRequest("GET", "/user/gordon", nil)
+	benchRequest(b, router, r)
+}
 
 // Route with 5 Params (no write)
 const fiveColon = "/:a/:b/:c/:d/:e"
@@ -420,12 +427,13 @@ func BenchmarkRevel_Param5(b *testing.B) {
 	r, _ := http.NewRequest("GET", fiveRoute, nil)
 	benchRequest(b, router, r)
 }
-func BenchmarkRivet_Param5(b *testing.B) {
-	router := loadRivetSingle("GET", fiveColon, rivetHandler)
 
-	r, _ := http.NewRequest("GET", fiveRoute, nil)
-	benchRequest(b, router, r)
-}
+// func BenchmarkRivet_Param5(b *testing.B) {
+// 	router := loadRivetSingle("GET", fiveColon, rivetHandler)
+
+// 	r, _ := http.NewRequest("GET", fiveRoute, nil)
+// 	benchRequest(b, router, r)
+// }
 func BenchmarkTango_Param5(b *testing.B) {
 	router := loadTangoSingle("GET", fiveColon, tangoHandler)
 
@@ -457,6 +465,13 @@ func BenchmarkVulcan_Param5(b *testing.B) {
 // 	r, _ := http.NewRequest("GET", fiveRoute, nil)
 // 	benchRequest(b, router, r)
 // }
+
+func BenchmarkPowerMux_Param5(b *testing.B) {
+	router := loadPowerMuxSingle("GET", fiveColon, httpHandlerFunc)
+
+	r, _ := http.NewRequest("GET", fiveRoute, nil)
+	benchRequest(b, router, r)
+}
 
 // Route with 20 Params (no write)
 const twentyColon = "/:a/:b/:c/:d/:e/:f/:g/:h/:i/:j/:k/:l/:m/:n/:o/:p/:q/:r/:s/:t"
@@ -603,12 +618,13 @@ func BenchmarkRevel_Param20(b *testing.B) {
 	r, _ := http.NewRequest("GET", twentyRoute, nil)
 	benchRequest(b, router, r)
 }
-func BenchmarkRivet_Param20(b *testing.B) {
-	router := loadRivetSingle("GET", twentyColon, rivetHandler)
 
-	r, _ := http.NewRequest("GET", twentyRoute, nil)
-	benchRequest(b, router, r)
-}
+// func BenchmarkRivet_Param20(b *testing.B) {
+// 	router := loadRivetSingle("GET", twentyColon, rivetHandler)
+
+// 	r, _ := http.NewRequest("GET", twentyRoute, nil)
+// 	benchRequest(b, router, r)
+// }
 func BenchmarkTango_Param20(b *testing.B) {
 	router := loadTangoSingle("GET", twentyColon, tangoHandler)
 
@@ -640,6 +656,13 @@ func BenchmarkVulcan_Param20(b *testing.B) {
 // 	r, _ := http.NewRequest("GET", twentyRoute, nil)
 // 	benchRequest(b, router, r)
 // }
+
+func BenchmarkPowerMux_Param20(b *testing.B) {
+	router := loadPowerMuxSingle("GET", twentyColon, httpHandlerFunc)
+
+	r, _ := http.NewRequest("GET", twentyRoute, nil)
+	benchRequest(b, router, r)
+}
 
 // Route with Param and write
 func BenchmarkAce_ParamWrite(b *testing.B) {
@@ -782,12 +805,13 @@ func BenchmarkRevel_ParamWrite(b *testing.B) {
 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
 	benchRequest(b, router, r)
 }
-func BenchmarkRivet_ParamWrite(b *testing.B) {
-	router := loadRivetSingle("GET", "/user/:name", rivetHandlerWrite)
 
-	r, _ := http.NewRequest("GET", "/user/gordon", nil)
-	benchRequest(b, router, r)
-}
+// func BenchmarkRivet_ParamWrite(b *testing.B) {
+// 	router := loadRivetSingle("GET", "/user/:name", rivetHandlerWrite)
+
+// 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
+// 	benchRequest(b, router, r)
+// }
 func BenchmarkTango_ParamWrite(b *testing.B) {
 	router := loadTangoSingle("GET", "/user/:name", tangoHandlerWrite)
 
@@ -822,3 +846,10 @@ func BenchmarkVulcan_ParamWrite(b *testing.B) {
 // 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
 // 	benchRequest(b, router, r)
 // }
+
+func BenchmarkPowerMux_ParamWrite(b *testing.B) {
+	router := loadPowerMuxSingle("GET", "/user/:name", powerMuxHandlerWrite)
+
+	r, _ := http.NewRequest("GET", "/user/gordon", nil)
+	benchRequest(b, router, r)
+}
