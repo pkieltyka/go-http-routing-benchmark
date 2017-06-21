@@ -22,7 +22,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"github.com/bmizerany/pat"
-	"github.com/pressly/chi"
+	"github.com/go-chi/chi"
 	// "github.com/daryl/zeus"
 	"github.com/dimfeld/httptreemux"
 	"github.com/emicklei/go-restful"
