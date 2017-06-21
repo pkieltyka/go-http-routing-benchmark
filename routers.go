@@ -490,19 +490,23 @@ func loadChi(routes []route) http.Handler {
 		h = httpHandlerFuncTest
 	}
 
+	re := regexp.MustCompile(":([^/]*)")
+
 	mux := chi.NewRouter()
 	for _, route := range routes {
+		path := re.ReplaceAllString(route.path, "{$1}")
+
 		switch route.method {
 		case "GET":
-			mux.Get(route.path, h)
+			mux.Get(path, h)
 		case "POST":
-			mux.Post(route.path, h)
+			mux.Post(path, h)
 		case "PUT":
-			mux.Put(route.path, h)
+			mux.Put(path, h)
 		case "PATCH":
-			mux.Patch(route.path, h)
+			mux.Patch(path, h)
 		case "DELETE":
-			mux.Delete(route.path, h)
+			mux.Delete(path, h)
 		default:
 			panic("Unknown HTTP method: " + route.method)
 		}
