@@ -44,10 +44,11 @@ import (
 	"github.com/pilu/traffic"
 	"github.com/plimble/ace"
 	"github.com/rcrowley/go-tigertonic"
-	"github.com/revel/revel"
-	"github.com/robfig/pathtree"
 	"github.com/typepress/rivet"
 	// "github.com/ursiform/bear"
+	"strings"
+
+	"github.com/AndrewBurian/powermux"
 	"github.com/vanng822/r2router"
 	goji "github.com/zenazn/goji/web"
 )
@@ -90,7 +91,7 @@ func init() {
 	initBeego()
 	initGin()
 	initMartini()
-	initRevel()
+	//initRevel()
 	initTango()
 	initTraffic()
 }
@@ -1064,136 +1065,136 @@ func loadR2routerSingle(method, path string, handler r2router.HandlerFunc) http.
 	return router
 }
 
-// Revel (Router only)
-// In the following code some Revel internals are modelled.
-// The original revel code is copyrighted by Rob Figueiredo.
-// See https://github.com/revel/revel/blob/master/LICENSE
-type RevelController struct {
-	*revel.Controller
-	router *revel.Router
-}
+// // Revel (Router only)
+// // In the following code some Revel internals are modelled.
+// // The original revel code is copyrighted by Rob Figueiredo.
+// // See https://github.com/revel/revel/blob/master/LICENSE
+// type RevelController struct {
+// 	*revel.Controller
+// 	router *revel.Router
+// }
 
-func (rc *RevelController) Handle() revel.Result {
-	return revelResult{}
-}
+// func (rc *RevelController) Handle() revel.Result {
+// 	return revelResult{}
+// }
 
-func (rc *RevelController) HandleWrite() revel.Result {
-	return rc.RenderText(rc.Params.Get("name"))
-}
+// func (rc *RevelController) HandleWrite() revel.Result {
+// 	return rc.RenderText(rc.Params.Get("name"))
+// }
 
-func (rc *RevelController) HandleTest() revel.Result {
-	return rc.RenderText(rc.Request.RequestURI)
-}
+// func (rc *RevelController) HandleTest() revel.Result {
+// 	return rc.RenderText(rc.Request.GetRequestURI())
+// }
 
-type revelResult struct{}
+// type revelResult struct{}
 
-func (rr revelResult) Apply(req *revel.Request, resp *revel.Response) {}
+// func (rr revelResult) Apply(req *revel.Request, resp *revel.Response) {}
 
-func (rc *RevelController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	// Dirty hacks, do NOT copy!
-	revel.MainRouter = rc.router
+// func (rc *RevelController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+// 	// Dirty hacks, do NOT copy!
+// 	revel.MainRouter = rc.router
 
-	upgrade := r.Header.Get("Upgrade")
-	if upgrade == "websocket" || upgrade == "Websocket" {
-		panic("Not implemented")
-	} else {
-		var (
-			req  = revel.NewRequest(r)
-			resp = revel.NewResponse(w)
-			c    = revel.NewController(req, resp)
-		)
-		req.Websocket = nil
-		revel.Filters[0](c, revel.Filters[1:])
-		if c.Result != nil {
-			c.Result.Apply(req, resp)
-		} else if c.Response.Status != 0 {
-			panic("Not implemented")
-		}
-		// Close the Writer if we can
-		if w, ok := resp.Out.(io.Closer); ok {
-			w.Close()
-		}
-	}
-}
+// 	upgrade := r.Header.Get("Upgrade")
+// 	if upgrade == "websocket" || upgrade == "Websocket" {
+// 		panic("Not implemented")
+// 	} else {
+// 		var (
+// 			req  = revel.NewRequest(r)
+// 			resp = revel.NewResponse(w)
+// 			c    = revel.NewController(req, resp)
+// 		)
+// 		req.WebSocket = nil
+// 		revel.Filters[0](c, revel.Filters[1:])
+// 		if c.Result != nil {
+// 			c.Result.Apply(req, resp)
+// 		} else if c.Response.Status != 0 {
+// 			panic("Not implemented")
+// 		}
+// 		// Close the Writer if we can
+// 		if w, ok := resp.Out.(io.Closer); ok {
+// 			w.Close()
+// 		}
+// 	}
+// }
 
-func initRevel() {
-	// Only use the Revel filters required for this benchmark
-	revel.Filters = []revel.Filter{
-		revel.RouterFilter,
-		revel.ParamsFilter,
-		revel.ActionInvoker,
-	}
+// func initRevel() {
+// 	// Only use the Revel filters required for this benchmark
+// 	revel.Filters = []revel.Filter{
+// 		revel.RouterFilter,
+// 		revel.ParamsFilter,
+// 		revel.ActionInvoker,
+// 	}
 
-	revel.RegisterController((*RevelController)(nil),
-		[]*revel.MethodType{
-			&revel.MethodType{
-				Name: "Handle",
-			},
-			&revel.MethodType{
-				Name: "HandleWrite",
-			},
-			&revel.MethodType{
-				Name: "HandleTest",
-			},
-		})
-}
+// 	revel.RegisterController((*RevelController)(nil),
+// 		[]*revel.MethodType{
+// 			&revel.MethodType{
+// 				Name: "Handle",
+// 			},
+// 			&revel.MethodType{
+// 				Name: "HandleWrite",
+// 			},
+// 			&revel.MethodType{
+// 				Name: "HandleTest",
+// 			},
+// 		})
+// }
 
-func loadRevel(routes []route) http.Handler {
-	h := "RevelController.Handle"
-	if loadTestHandler {
-		h = "RevelController.HandleTest"
-	}
+// func loadRevel(routes []route) http.Handler {
+// 	h := "RevelController.Handle"
+// 	if loadTestHandler {
+// 		h = "RevelController.HandleTest"
+// 	}
 
-	router := revel.NewRouter("")
+// 	router := revel.NewRouter("")
 
-	// parseRoutes
-	var rs []*revel.Route
-	for _, r := range routes {
-		rs = append(rs, revel.NewRoute(r.method, r.path, h, "", "", 0))
-	}
-	router.Routes = rs
+// 	// parseRoutes
+// 	var rs []*revel.Route
+// 	for _, r := range routes {
+// 		rs = append(rs, revel.NewRoute(r.method, r.path, h, "", "", 0))
+// 	}
+// 	router.Routes = rs
 
-	// updateTree
-	router.Tree = pathtree.New()
-	for _, r := range router.Routes {
-		err := router.Tree.Add(r.TreePath, r)
-		// Allow GETs to respond to HEAD requests.
-		if err == nil && r.Method == "GET" {
-			err = router.Tree.Add("/HEAD"+r.Path, r)
-		}
-		// Error adding a route to the pathtree.
-		if err != nil {
-			panic(err)
-		}
-	}
+// 	// updateTree
+// 	router.Tree = pathtree.New()
+// 	for _, r := range router.Routes {
+// 		err := router.Tree.Add(r.TreePath, r)
+// 		// Allow GETs to respond to HEAD requests.
+// 		if err == nil && r.Method == "GET" {
+// 			err = router.Tree.Add("/HEAD"+r.Path, r)
+// 		}
+// 		// Error adding a route to the pathtree.
+// 		if err != nil {
+// 			panic(err)
+// 		}
+// 	}
 
-	rc := new(RevelController)
-	rc.router = router
-	return rc
-}
+// 	rc := new(RevelController)
+// 	rc.router = router
+// 	return rc
+// }
 
-func loadRevelSingle(method, path, action string) http.Handler {
-	router := revel.NewRouter("")
+// func loadRevelSingle(method, path, action string) http.Handler {
+// 	router := revel.NewRouter("")
 
-	route := revel.NewRoute(method, path, action, "", "", 0)
-	if err := router.Tree.Add(route.TreePath, route); err != nil {
-		panic(err)
-	}
+// 	route := revel.NewRoute(method, path, action, "", "", 0)
+// 	if err := router.Tree.Add(route.TreePath, route); err != nil {
+// 		panic(err)
+// 	}
 
-	rc := new(RevelController)
-	rc.router = router
-	return rc
-}
+// 	rc := new(RevelController)
+// 	rc.router = router
+// 	return rc
+// }
 
 // Rivet
 func rivetHandler() {}
 
 func rivetHandlerWrite(c rivet.Context) {
-	c.WriteString(c.GetParams().Get("name"))
+	c.WriteString(c.Params.Get("name"))
 }
 
 func rivetHandlerTest(c rivet.Context) {
-	c.WriteString(c.Request().RequestURI)
+	c.WriteString(c.Req.RequestURI)
 }
 
 func loadRivet(routes []route) http.Handler {
@@ -1202,7 +1203,7 @@ func loadRivet(routes []route) http.Handler {
 		h = rivetHandlerTest
 	}
 
-	router := rivet.NewRouter(nil)
+	router := rivet.New()
 	for _, route := range routes {
 		router.Handle(route.method, route.path, h)
 	}
@@ -1210,7 +1211,7 @@ func loadRivet(routes []route) http.Handler {
 }
 
 func loadRivetSingle(method, path string, handler interface{}) http.Handler {
-	router := rivet.NewRouter(nil)
+	router := rivet.New()
 
 	router.Handle(method, path, handler)
 
@@ -1418,6 +1419,58 @@ func loadVulcanSingle(method, path string, handler http.HandlerFunc) http.Handle
 // 	}
 // 	return m
 // }
+
+// PowerMux
+func powerMuxHandlerWrite(w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, powermux.PathParam(r, "name"))
+}
+
+func loadPowerMux(routes []route) http.Handler {
+	h := http.HandlerFunc(httpHandlerFunc)
+	if loadTestHandler {
+		h = http.HandlerFunc(httpHandlerFuncTest)
+	}
+
+	m := powermux.NewServeMux()
+	for _, route := range routes {
+		if route.path != "/" && strings.HasSuffix(route.path, "/") {
+			route.path = route.path + "*"
+		}
+		r := m.Route(route.path)
+		switch route.method {
+		case "GET":
+			r.GetFunc(h)
+		case "POST":
+			r.PostFunc(h)
+		case "PUT":
+			r.PutFunc(h)
+		case "DELETE":
+			r.DeleteFunc(h)
+		default:
+			panic("Unknow HTTP method: " + route.method)
+		}
+	}
+	return m
+}
+
+func loadPowerMuxSingle(method, path string, handler http.HandlerFunc) http.Handler {
+	m := powermux.NewServeMux()
+	r := m.Route(path)
+
+	switch method {
+	case "GET":
+		r.GetFunc(handler)
+	case "POST":
+		r.PostFunc(handler)
+	case "PUT":
+		r.PutFunc(handler)
+	case "DELETE":
+		r.DeleteFunc(handler)
+	default:
+		panic("Unknow HTTP method: " + method)
+	}
+	return m
+}
 
 // Usage notice
 func main() {
