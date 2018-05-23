@@ -277,9 +277,9 @@ func init() {
 	calcMem("R2router", func() {
 		staticR2router = loadR2router(staticRoutes)
 	})
-	calcMem("Revel", func() {
-		staticRevel = loadRevel(staticRoutes)
-	})
+	// calcMem("Revel", func() {
+	// 	staticRevel = loadRevel(staticRoutes)
+	// })
 	// calcMem("Rivet", func() {
 	// 	staticRivet = loadRivet(staticRoutes)
 	// })

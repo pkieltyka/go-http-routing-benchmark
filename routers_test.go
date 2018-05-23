@@ -33,7 +33,7 @@ var (
 		{"Pat", loadPat},
 		{"Possum", loadPossum},
 		{"R2router", loadR2router},
-		{"Revel", loadRevel},
+		//{"Revel", loadRevel},
 		// {"Rivet", loadRivet},
 		// {"Tango", loadTango},
 		{"TigerTonic", loadTigerTonic},
